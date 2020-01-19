@@ -93,7 +93,11 @@ class BlockChain:
         return False
 
 
-  # 2 Mining Blocks
+# Creating an address for the node on port 5000
+node_address = str(uuid4()).replace('-', '')
+
+
+# 2 Mining Blocks
 blockchain = BlockChain()
 app = Flask(__name__)
 
@@ -104,12 +108,15 @@ def mine_block():
     previous_proof = previous_block['proof']
     proof = blockchain.proof_of_work(previous_proof)
     previous_hash = blockchain.hash(previous_block)
+    blockchain.add_transactions(
+        sender=node_address, reciever='Devesh', amount=100)
     block = blockchain.create_block(proof, previous_hash)
     response = {'message': 'Congratulations, You just mined a block!',
                 'index': block['index'],
                 'timestamp': block['timestamp'],
                 'proof': block['proof'],
-                'previous_hash': block['previous_hash']}
+                'previous_hash': block['previous_hash'],
+                'transactions': block['transactions']}
     return jsonify(response), 200
 
 
