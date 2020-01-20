@@ -136,8 +136,19 @@ def is_valid():
         response = {'message': 'Ahh. the Blockchain is invalid.'}
     return jsonify(response), 200
 
+
+@app.route('/add_transactions', methods=['POST'])
+def add_transaction():
+    json = request.get_json()
+    transaction_keys = ['sender', 'reciever', 'amount']
+    if not all(key in json for key in transaction_keys):
+        return 'Some element of transaction is missing', 400
+    index = blockchain.add_transactions(
+        json['sender'], json['reciever'], json['amount'])
+    response = {'message': f'Transaction will be added to block {index}.'}
+    return jsonify(response), 201
+
+
 # 3 Decenterlize the Blockchain
-
-
 # Running The app
 app.run(host='0.0.0.0', port='5000')

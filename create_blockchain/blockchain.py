@@ -6,7 +6,6 @@ app = Flask(__name__)
 
 # 1 Builiding a BlockChain
 
-
 class BlockChain:
     def __init__(self):
         self.chain = []
