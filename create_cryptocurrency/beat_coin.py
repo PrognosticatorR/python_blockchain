@@ -150,5 +150,33 @@ def add_transaction():
 
 
 # 3 Decenterlize the Blockchain
+
+# Connecting New Node
+@app.route('/connect_node', methods=['POST'])
+def connect_node():
+    json = request.get_json()
+    nodes = json.get('nodes')
+    if nodes is None:
+        return 'No node', 400
+    for node in nodes:
+        blockchain.add_node(node)
+    response = {'message': 'All the nodes are now connected.The BeatCoin now contains the  ',
+                'total_nodes': list(blockchain.nodes)}
+    return jsonify(response), 201
+
+
+@app.route('/replace_chain', methods=['GET'])
+def replace_chain():
+    is_chain_replaced = blockchain.replace_chain()
+    if is_chain_replaced:
+        response = {
+            'message': 'All Good. the Blockchain have long chain so this chain replaced by longest chain.',
+            'new_chain': blockchain.chain}
+    else:
+        response = {'message': 'Ahh. the Blockchain is longest one.',
+                    'actual_chain': blockchain.chain}
+    return jsonify(response), 200
+
+
 # Running The app
 app.run(host='0.0.0.0', port='5000')
